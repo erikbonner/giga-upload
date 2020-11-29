@@ -1,0 +1,21 @@
+{
+  "name": "file-uploader",
+  "version": "1.0.0",
+  "description": "A simple file uploader utility.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node .",
+    "serve": "nodemon --watch views --watch public/css/main --watch public/css/notfound -e js,css,html ./app.js"
+  },
+  "author": "Erik Bonner",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.3",
+    "formidable": "^1.0.17",
+    "jsonfile": "^2.4.0",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
