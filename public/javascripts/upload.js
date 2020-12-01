@@ -39,7 +39,7 @@ $('#upload-input').on('change', function () {
     }
 
     $.ajax({
-      url: '/upload',
+      url: document.baseURI + 'upload',
       type: 'POST',
       data: formData,
       processData: false,

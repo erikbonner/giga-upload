@@ -34,6 +34,7 @@ const fs = require('fs');
 const jsonfile = require('jsonfile');
 const shortid = require('shortid');
 
+// this is necessary when we are hosting on a server in a subdirectory
 const baseUrl = require('./config.json').baseUrl
 console.log("baseUrl:", baseUrl);
 
@@ -72,15 +73,19 @@ const getPathFromKeymap = (key) => {
   return jsonfile.readFileSync(mappingsFile)[key];
 }
 
-app.use(express.static(path.join(__dirname, 'public')));
+const router = express.Router()
 
-app.get(baseUrl, (_, res) => {
+app.use(baseUrl, express.static(path.join(__dirname, 'public')));
+
+router.get('/', (_, res) => {
+  console.log("GET received /");
   res.sendFile(path.join(__dirname, 'views/index.html'));
 });
 
 
-app.get(baseUrl + ':id', (req, res) => {
+router.get('/:id', (req, res) => {
   const id = req.params.id;
+  console.log("GET received /:id", id)
   const filename = getPathFromKeymap(id);
   if (filename === undefined || filename === null) {
     res.status(404).sendFile(path.join(__dirname, 'views/not-found.html'));
@@ -90,7 +95,8 @@ app.get(baseUrl + ':id', (req, res) => {
   res.sendFile(path.join(__dirname, 'uploads/' + filename));
 });
 
-app.post(baseUrl + 'upload', (req, res) => {
+router.post('/upload', (req, res) => {
+  console.log("upload received")
   var key;
   var form = new formidable.IncomingForm();
   form.uploadDir = path.join(__dirname, '/uploads');
@@ -104,6 +110,8 @@ app.post(baseUrl + 'upload', (req, res) => {
 
   form.parse(req);
 });
+
+app.use(baseUrl, router)
 
 const port = process.env.PORT || '8080';
 app.listen(port, () => console.log(`Server listening on port ${port}`));
