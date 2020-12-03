@@ -5,11 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "node .",
-    "serve": "nodemon --watch views --watch public/css/main --watch public/css/notfound -e js,css,html ./app.js"
+    "serve": "nodemon --watch views --watch public/css/main --watch public/css/notfound --watch app.js -e js,css,html,ejs ./app.js"
   },
   "author": "Erik Bonner",
   "license": "MIT",
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.13.3",
     "formidable": "^1.0.17",
     "jsonfile": "^2.4.0",

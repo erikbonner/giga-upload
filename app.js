@@ -76,19 +76,19 @@ const getPathFromKeymap = (key) => {
 const router = express.Router()
 
 app.use(baseUrl, express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs')
 
 router.get('/', (_, res) => {
   console.log("GET received /");
-  res.sendFile(path.join(__dirname, 'views/index.html'));
+  res.render(path.join(__dirname, 'views/index.ejs'), {baseUrl})
 });
-
 
 router.get('/:id', (req, res) => {
   const id = req.params.id;
   console.log("GET received /:id", id)
   const filename = getPathFromKeymap(id);
   if (filename === undefined || filename === null) {
-    res.status(404).sendFile(path.join(__dirname, 'views/not-found.html'));
+    res.status(404).render(path.join(__dirname, 'views/not-found.ejs'), {baseUrl});
     return;
   }
   res.set({ "Content-Disposition": 'attachment; filename="' + filename + '"' });
