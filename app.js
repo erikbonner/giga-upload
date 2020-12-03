@@ -34,8 +34,22 @@ const fs = require('fs');
 const jsonfile = require('jsonfile');
 const shortid = require('shortid');
 
-// this is necessary when we are hosting on a server in a subdirectory
-const baseUrl = require('./config.json').baseUrl
+const serverConfigFile = './server-config.json'
+
+// set default baseUrl to root.
+// This may be overloaded by defining a new value in serverConfigFile on the server.
+// This will be necessary if we are hosting the webapp from a subdirectory
+let baseUrl = "/"
+if(fs.existsSync(serverConfigFile)) {
+  console.log("reading local server configuration...")
+  try {
+    baseUrl = JSON.parse(fs.readFileSync(serverConfigFile)).baseUrl || baseUrl
+    console.log("updated baseUrl to", baseUrl)
+  } catch(e) {
+    console.warn("error loading server config:", e);
+    console.warn("using defaults");
+  }
+}
 console.log("baseUrl:", baseUrl);
 
 const mappingsJson = './mappings.json';
